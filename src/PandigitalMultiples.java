@@ -14,7 +14,7 @@ public class PandigitalMultiples {
 				String produto = Integer.toString(result);
 				
 				if((valorTotal.length() + produto.length()) > 9){
-					// Ja passou dos 9 dígitos
+					// Ja passou dos 9 digitos
 					break;
 				}else{
 					valorTotal = valorTotal  + (i * j);
@@ -22,7 +22,7 @@ public class PandigitalMultiples {
 				
 				for(String c : produto.split("")){
 					if(c.equals("0") || numerosJaUsados.contains(c)){
-						// Ja nao é mais pandigital
+						// Ja nao Ã© mais pandigital
 						break;
 					}
 					numerosJaUsados.add(c);
