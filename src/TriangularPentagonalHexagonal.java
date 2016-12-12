@@ -1,10 +1,8 @@
+import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 /**
  * 
@@ -17,29 +15,42 @@ import java.util.stream.Collectors;
  */
 public class TriangularPentagonalHexagonal {
 
-	List<>
-
 	public static void main(String[] args) {
 
 		// 40755 -> Hexagonal, 143
-		Map<Long, List<TrianglePentHexa>> mapa = new HashMap<>();
+		Map<BigInteger, List<TrianglePentHexa>> mapa = new HashMap<>();
 
-		for (int i = 2; i < 1000000; i++) {
-			Long triangle = calculateTriangle(i);
+		for (int i = 0; i < 999999; i++) {
+			BigInteger triangle = calculateTriangle(i);
 			putOnMap(mapa, i, triangle, TriangularPentagonalHexagonalEnum.T);
-
-			Long penta = calculatePentagonal(i);
-			putOnMap(mapa, i, penta, TriangularPentagonalHexagonalEnum.P);
-
-			Long hexa = calculateHexagonal(i);
-			putOnMap(mapa, i, hexa, TriangularPentagonalHexagonalEnum.H);
+			// if (mapa.get(triangle).size() == 3) {
+			// System.out.println("Valor: " + triangle + " " +
+			// mapa.get(triangle).toString());
+			// }
 		}
 
-		mapa.entrySet().stream().sorted(Map.Entry.comparingByKey()).filter(t -> (t.getValue().size() == 3) && (t.getKey() > 0)).forEach(System.out::println);
+		for (int i = 0; i < 999999; i++) {
+			BigInteger penta = calculatePentagonal(i);
+			putOnMap(mapa, i, penta, TriangularPentagonalHexagonalEnum.P);
+		}
+
+		for (int i = 0; i < 999999; i++) {
+			BigInteger hexa = calculateHexagonal(i);
+			putOnMap(mapa, i, hexa, TriangularPentagonalHexagonalEnum.H);
+
+		}
+
+		// mapa.entrySet().stream().sorted(Map.Entry.comparingByKey())
+		// .filter(t -> (t.getValue().size() == 3) && (t.getKey() >=
+		// 0)).forEach(System.out::println);
 	}
 
-	private static void putOnMap(Map<Long, List<TrianglePentHexa>> mapa, int i, Long value, TriangularPentagonalHexagonalEnum enumType) {
-		if (!mapa.containsKey(value)) {
+	private static void putOnMap(Map<BigInteger, List<TrianglePentHexa>> mapa, int i, BigInteger value,
+			TriangularPentagonalHexagonalEnum enumType) {
+		if (!mapa.containsKey(value) && !enumType.equals(TriangularPentagonalHexagonalEnum.T)) {
+			return;
+		}
+		if (!mapa.containsKey(value) && enumType.equals(TriangularPentagonalHexagonalEnum.T)) {
 			TrianglePentHexa type = new TrianglePentHexa(enumType, i);
 			List<TrianglePentHexa> list = new ArrayList<TrianglePentHexa>();
 			list.add(type);
@@ -47,20 +58,32 @@ public class TriangularPentagonalHexagonal {
 		} else {
 			List<TrianglePentHexa> mapValue = mapa.get(value);
 			mapValue.add(new TrianglePentHexa(enumType, i));
+			if (mapa.get(value).size() == 3) {
+				System.out.println("Valor: " + value + " " + mapa.get(value).toString());
+			}
 		}
-		
 	}
 
-	private static Long calculateTriangle(int i) {
-		return (long) (i * (i + 1) / 2);
+	private static BigInteger calculateTriangle(int i) {
+		BigInteger triangle = BigInteger.valueOf(i);
+		// i * (i + 1) / 2;
+		triangle = triangle.multiply(triangle.add(BigInteger.ONE)).divide(BigInteger.valueOf(2));
+		return triangle;
 	}
 
-	private static Long calculateHexagonal(int i) {
-		return (long) (i * (2 * i - 1));
+	private static BigInteger calculateHexagonal(int i) {
+		BigInteger hexa = BigInteger.valueOf(i);
+		// i * (2 * i - 1);
+		hexa = hexa.multiply(BigInteger.valueOf(2).multiply(hexa).subtract(BigInteger.ONE));
+		return hexa;
 	}
 
-	private static Long calculatePentagonal(int i) {
-		return (long) (i * (3 * i - 1) / 2);
+	private static BigInteger calculatePentagonal(int i) {
+		BigInteger penta = BigInteger.valueOf(i);
+		// i * (3 * i - 1) / 2;
+		penta = penta.multiply(BigInteger.valueOf(3).multiply(penta).subtract(BigInteger.ONE)).divide(BigInteger.valueOf(2));
+		return penta;
+
 	}
 
 }
