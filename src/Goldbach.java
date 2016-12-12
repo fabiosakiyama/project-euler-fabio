@@ -10,38 +10,40 @@ public class Goldbach {
 
 	public static void main(String[] args) {
 
-		for (int i = 1; i < 50; i++) {
+		boolean achou = false;
+		int contador = 1;
+		while (!achou) {
 
-			if (i % 2 == 0) {
-				continue;
+			if (contador % 2 != 0 && isComposite(contador)) {
+				achou = checkGoldBach(contador);
 			}
-
-			boolean isComposite = isComposite(i);
-
-			if (!isComposite) {
-				continue;
-			}
-
-			checkGoldBach(i);
+			contador++;
 		}
 
 	}
 
-	private static void checkGoldBach(int i) {
+	private static boolean checkGoldBach(int i) {
+		boolean achou = false;
 		for (int possiblePrime = 1; possiblePrime < i; possiblePrime++) {
 			boolean isPrime = isPrimeNumber(possiblePrime);
 			if (!isPrime) {
 				continue;
 			}
 			for (int possibleSquare = 1; possibleSquare < i; possibleSquare++) {
-
 				int possibleI = possiblePrime + 2 * possibleSquare * possibleSquare;
 				if (possibleI == i) {
-					System.out.println(i + " = " + possiblePrime + " + 2 x " + possibleSquare + "²");
-					return;
+					// System.out.println(i + " = " + possiblePrime + " + 2 x "
+					// + possibleSquare + "²");
+					achou = true;
+					return false;
 				}
 			}
 		}
+		if (!achou) {
+			System.out.println("FAIL " + i);
+			return true;
+		}
+		return false;
 	}
 
 	private static boolean isPrimeNumber(int numberToBeTested) {
